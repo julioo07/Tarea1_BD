@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "Default.aspx.cs",
               "ToolTip": "C:\\Users\\fabri\\OneDrive\\Escritorio\\BaseDatos1\\TareaBD\\Default.aspx.cs",
               "RelativeToolTip": "Default.aspx.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAIwEIAAAAoAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-24T20:29:00.195Z",
               "EditorCaption": ""
@@ -55,7 +55,8 @@
               "RelativeToolTip": "Default.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-02-24T20:23:48.099Z"
+              "WhenOpened": "2024-02-24T20:23:48.099Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -65,7 +66,7 @@
               "RelativeDocumentMoniker": "Web.config",
               "ToolTip": "C:\\Users\\fabri\\OneDrive\\Escritorio\\BaseDatos1\\TareaBD\\Web.config",
               "RelativeToolTip": "Web.config",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABcAAAAVAAAA",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAwDIAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
               "WhenOpened": "2024-02-24T20:23:43.557Z",
               "EditorCaption": ""

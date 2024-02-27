@@ -22,19 +22,44 @@ namespace TareaBD
                 CargaDatosEmpleado();
             }
         }
-        public void CargaDatosEmpleado()
+        public void CargaDatosEmpleado()  // encargado de Mostrar la lista de los empleados
         {
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["connDB"].ConnectionString))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SPSEmpleados";  // Nombre del stored procedure encargado de EnseñarEmpleados
+                cmd.CommandText = "SPSEmpleado"; // SP que usaremos
                 cmd.Connection = conn;
+
+                // Agrega el parámetro de salida
+                SqlParameter outParameter = new SqlParameter("@OutResulTCode", SqlDbType.Int);
+                outParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(outParameter);
+
                 conn.Open();
-                gvdEmpleados.DataSource = cmd.ExecuteReader();
-                gvdEmpleados.DataBind();
+                cmd.ExecuteNonQuery();  // Se ejecuta el SP
+
+                // Se ve el codigo que se obtuvo
+                int resultado = (int)cmd.Parameters["@OutResulTCode"].Value;
+                if (resultado == 0)
+                {
+                    // El código de resultado es exitoso, ahora obten los datos y asigna al GridView
+                    using (SqlCommand cmdSelect = new SqlCommand("SELECT [Id], [Nombre], [Salario] FROM [BaseDatos].[dbo].[Empleado] ORDER BY Nombre", conn))
+                    {
+                        // ahora si se use el Execute Reader
+                        using (SqlDataReader reader = cmdSelect.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                gvdEmpleados.DataSource = reader;
+                                gvdEmpleados.DataBind();
+                            }
+                        }
+                    }
+                }
             }
         }
+
 
         public void InsertarEmpleado()
         {
@@ -43,11 +68,17 @@ namespace TareaBD
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SPIEmpleado";  // nombre del stored procedure encargado de InsertEmpleados
-                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = txtNombre.Text.Trim();
-                cmd.Parameters.Add("@Salario", SqlDbType.Money).Value = decimal.Parse(txtSalario.Text.Trim());
-                cmd.Connection = conn;
+                cmd.Connection= conn;
+
+                cmd.Parameters.Add("@inNombre", SqlDbType.VarChar).Value = txtNombre.Text.Trim();
+                cmd.Parameters.Add("@inSalario", SqlDbType.Money).Value = decimal.Parse(txtSalario.Text.Trim());
+                SqlParameter outParameter = new SqlParameter("@OutResulTCode", SqlDbType.Int);
+                outParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(outParameter);
+
                 conn.Open();
                 cmd.ExecuteNonQuery();
+
             }
         }
 
