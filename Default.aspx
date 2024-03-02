@@ -40,10 +40,22 @@
             </asp:Panel>
 
             <br/>
-            
 
+            <asp:Panel ID="pnlError" runat="server" Visible="false">
+                <div>
+                    <br/>
+                    <asp:Label ID="lblMensajeError" Text="" runat="server"></asp:Label>
+                </div>
+                <br/>
+                <br/> 
+                    <asp:Button ID="RegresarError" runat="server" Text="Regresar" OnClick="btnRegresar_Click" />
+            </asp:Panel>
+
+
+            <br/>
 
         </div>
+   
     </main>
 
 </asp:Content>

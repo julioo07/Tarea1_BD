@@ -56,7 +56,7 @@ namespace TareaBD
                             }
                         }
                     }
-                }
+                } 
             }
         }
 
@@ -73,11 +73,40 @@ namespace TareaBD
                 cmd.Parameters.Add("@inNombre", SqlDbType.VarChar).Value = txtNombre.Text.Trim();
                 cmd.Parameters.Add("@inSalario", SqlDbType.Money).Value = decimal.Parse(txtSalario.Text.Trim());
                 SqlParameter outParameter = new SqlParameter("@OutResulTCode", SqlDbType.Int);
+
                 outParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(outParameter);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
+                
+                // Validacion de errores
+                int error = (int)cmd.Parameters["@OutResulTCode"].Value;
+                if (error == 0)
+                {
+                    pnlDatosEmpleado.Visible = false;
+                    const string texto = "Inserción exitosa";
+                    lblMensajeError.Text = texto;
+                    pnlError.Visible = true;
+
+                }
+                if (error == 50006)
+                {
+                    pnlDatosEmpleado.Visible = false;
+                    const string texto = "Error: El empleado ya existe";
+                    lblMensajeError.Text = texto;
+                    pnlError.Visible = true;
+                    
+                }
+                // No hace nada, el error por formato salta antes
+                /*
+                else 
+                {
+                    pnlDatosEmpleado.Visible = false;
+                    const string texto = "Error: Los datos no tienen el formato correcto";
+                    lblMensajeError.Text = texto;
+                    pnlError.Visible = true;
+                }*/
 
             }
         }
@@ -92,10 +121,6 @@ namespace TareaBD
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             pnlAltaEmpleado.Visible=false;
-            pnlDatosEmpleado.Visible=true;
-            
-            //lblMensaje.Text = "Inserción exitosa";
-            //lblMensaje.Visible = true;
             InsertarEmpleado();
             CargaDatosEmpleado();
         }
@@ -103,7 +128,9 @@ namespace TareaBD
         protected void btnRegresar_Click(object sender, EventArgs e)
         {
             pnlAltaEmpleado.Visible=false;
+            pnlError.Visible = false;
             pnlDatosEmpleado.Visible=true;
         }
+
     }
 }
