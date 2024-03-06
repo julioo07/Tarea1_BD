@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
 
 
 
@@ -63,6 +64,27 @@ namespace TareaBD
 
         public void InsertarEmpleado()
         {
+            // Valida que hayan ingresado datos en el nombre
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
+                MostrarMensaje("Error: Ingrese un nombre válido");
+                return;
+            }
+            // Valida que no sean numeros
+            if (System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"[^A-Za-z-]"))
+            {
+                MostrarMensaje("Error: El nombre no puede contener números");
+                return;
+            }
+
+            // Validación del salario
+            decimal salario;
+            if (!decimal.TryParse(txtSalario.Text.Trim(), out salario))
+            {
+                MostrarMensaje("Error: Ingrese un salario válido");
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["connDB"].ConnectionString))
             {
                 SqlCommand cmd = new SqlCommand();
@@ -70,10 +92,11 @@ namespace TareaBD
                 cmd.CommandText = "SPIEmpleado";  // nombre del stored procedure encargado de InsertEmpleados
                 cmd.Connection= conn;
 
+                // Validación del nombre
                 cmd.Parameters.Add("@inNombre", SqlDbType.VarChar).Value = txtNombre.Text.Trim();
                 cmd.Parameters.Add("@inSalario", SqlDbType.Money).Value = decimal.Parse(txtSalario.Text.Trim());
                 SqlParameter outParameter = new SqlParameter("@OutResulTCode", SqlDbType.Int);
-
+                
                 outParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(outParameter);
 
@@ -84,31 +107,23 @@ namespace TareaBD
                 int error = (int)cmd.Parameters["@OutResulTCode"].Value;
                 if (error == 0)
                 {
-                    pnlDatosEmpleado.Visible = false;
-                    const string texto = "Inserción exitosa";
-                    lblMensajeError.Text = texto;
-                    pnlError.Visible = true;
+                    MostrarMensaje("Inserción exitosa");
 
                 }
                 if (error == 50006)
                 {
-                    pnlDatosEmpleado.Visible = false;
-                    const string texto = "Error: El empleado ya existe";
-                    lblMensajeError.Text = texto;
-                    pnlError.Visible = true;
-                    
-                }
-                // No hace nada, el error por formato salta antes
-                /*
-                else 
-                {
-                    pnlDatosEmpleado.Visible = false;
-                    const string texto = "Error: Los datos no tienen el formato correcto";
-                    lblMensajeError.Text = texto;
-                    pnlError.Visible = true;
-                }*/
+                  MostrarMensaje("Error: El empleado ya existe");
 
+                }
             }
+        }
+
+      
+        private void MostrarMensaje(string mensaje)
+        {
+            pnlDatosEmpleado.Visible = false;
+            lblMensajeError.Text = mensaje;
+            pnlError.Visible = true;
         }
 
 
