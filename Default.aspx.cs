@@ -20,6 +20,7 @@ namespace TareaBD
         {
             if (!IsPostBack)
             {
+             
                 CargaDatosEmpleado();
             }
         }
@@ -71,7 +72,7 @@ namespace TareaBD
                 return;
             }
             // Valida que no sean numeros
-            if (System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"[^A-Za-z-]"))
+            if (System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"[^A-Za-z\s-\s-ÁÉÍÓÚáéíóú]"))
             {
                 MostrarMensaje("Error: El nombre no puede contener números");
                 return;
